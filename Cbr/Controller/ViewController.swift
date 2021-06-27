@@ -26,12 +26,13 @@ class ViewController: UIViewController {
         
         xmlparser.delegate = self
         
-        self.xmlparser.XMLApiCall("https://www.cbr.ru/scripts/XML_dynamic.asp?date_req1=01/06/2021&date_req2=25/06/2021&VAL_NM_RQ=R01235")
+        self.xmlparser.URLSetter()
         
         self.configureTableView()
+     
          
     }
-    
+ 
     func configureTableView(){
         
         view.addSubview(tableView)
