@@ -2,7 +2,12 @@
 //  Cbr
 //  Created by Евгений Фирман on 25.06.2021.
 
-import Foundation
+import UIKit
+
+protocol CurrencyDelegate{
+
+    func didUpdateCurrency(currency: [Currency])
+}
 
 // XML Parser Class
 class XMLParserClass: NSObject, XMLParserDelegate {
@@ -13,13 +18,10 @@ class XMLParserClass: NSObject, XMLParserDelegate {
     
     var dateVar = String()
     
+    var delegate: CurrencyDelegate?
+    
     var currency: [Currency] = []
-    
-    struct Currency {
-        var date: String
-        var value: String
-    }
-    
+        
     func URLSetter() {
         
     }
@@ -42,7 +44,8 @@ class XMLParserClass: NSObject, XMLParserDelegate {
                         
                         parser.parse()
                         
-                        print(self.currency)
+                        self.delegate?.didUpdateCurrency(currency: self.currency)
+                        
                     }
                 }
             }
@@ -57,6 +60,7 @@ class XMLParserClass: NSObject, XMLParserDelegate {
             value = String()
             
             dateVar = String()
+            
             if let date = attributeDict["Date"]{
                 
                 dateVar = date
@@ -85,4 +89,5 @@ class XMLParserClass: NSObject, XMLParserDelegate {
                 }
     }
 }
+
 
