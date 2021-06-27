@@ -14,7 +14,7 @@ class TableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        xmlparser.XMLApiCall("https://www.cbr.ru/scripts/XML_daily.asp?date_req=02/03/2002&d=1")
+        xmlparser.XMLApiCall("https://www.cbr.ru/scripts/XML_dynamic.asp?date_req1=01/06/2021&date_req2=25/06/2021&VAL_NM_RQ=R01235")
         
      
     }

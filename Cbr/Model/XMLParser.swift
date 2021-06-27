@@ -1,27 +1,28 @@
-//
 //  XMLParser.swift
 //  Cbr
-//
 //  Created by Евгений Фирман on 25.06.2021.
-//
 
 import Foundation
 
-// Hotels API Class
+// XML Parser Class
 class XMLParserClass: NSObject, XMLParserDelegate {
     
-    var currentelement: String = ""
+    var currentElement: String = ""
     
-    var charCode = String()
     var value = String()
+    
+    var dateVar = String()
     
     var currency: [Currency] = []
     
     struct Currency {
-        var charCode: String
+        var date: String
         var value: String
     }
     
+    func URLSetter() {
+        
+    }
     
     func XMLApiCall(_ url: String) {
         
@@ -34,9 +35,13 @@ class XMLParserClass: NSObject, XMLParserDelegate {
                 if error == nil {
                     
                     if let safeData = data {
+                        
                         let parser = XMLParser(data: safeData)
+                        
                         parser.delegate = self
+                        
                         parser.parse()
+                        
                         print(self.currency)
                     }
                 }
@@ -47,29 +52,37 @@ class XMLParserClass: NSObject, XMLParserDelegate {
     
     func parser(_ parser: XMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String] = [:]) {
         
-        if elementName == "Valute"{
-            charCode = String()
+        if elementName == "Record"{
+            
             value = String()
+            
+            dateVar = String()
+            if let date = attributeDict["Date"]{
+                
+                dateVar = date
+                
+            }
         }
-        self.currentelement = elementName
-        
+      
+        self.currentElement = elementName
     }
     
     func parser(_ parser: XMLParser, didEndElement elementName: String, namespaceURI: String?, qualifiedName qName: String?) {
         
-        if elementName == "Valute" {
-            let currency = Currency(charCode: charCode, value: value)
+        if elementName == "Record" {
+
+            let currency = Currency(date: dateVar, value: value)
+
             self.currency.append(currency)
         }
     }
     
     func parser(_ parser: XMLParser, foundCharacters string: String) {
-        
-        if self.currentelement == "CharCode" {
-            charCode += string
-        } else if self.currentelement == "Value" {
-            value += string
-        }
+    
+                if self.currentElement == "Value" {
+            
+                    value += string
+                }
     }
 }
 
