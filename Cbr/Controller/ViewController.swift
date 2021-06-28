@@ -30,7 +30,6 @@ class ViewController: UIViewController {
         
         self.xmlparser.URLSetter()          // API Data Parse
         
-        
         self.configureTableView()           // View set up for TableView
         
         
@@ -186,7 +185,6 @@ extension ViewController: CurrencyDelegate {
 
 extension ViewController: UITextFieldDelegate{
     
-    
     func textFieldDidEndEditing(_ textField: UITextField) {               // Handling didEndEditing and passing data to storage
         
         if let text = textField.text {
@@ -199,7 +197,6 @@ extension ViewController: UITextFieldDelegate{
         textField.text = ""
     }
     
-    
     func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {      // Handling endEditing method
         
         if textField.text != ""{
@@ -207,7 +204,7 @@ extension ViewController: UITextFieldDelegate{
             return true
             
         } else {
-            
+    
             textField.placeholder = "Цена"
             
             return false
