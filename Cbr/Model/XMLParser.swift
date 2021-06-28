@@ -31,8 +31,9 @@ class XMLParserClass: NSObject, XMLParserDelegate {
         
         let string: String? = "https://cbr.ru/scripts/XML_dynamic.asp?date_req1=\(firstParam)&date_req2=\(secondParam)&VAL_NM_RQ=R01235"
         
+        
         if let safeString = string {
-            
+        
             XMLApiCall(safeString)
         }
     }
