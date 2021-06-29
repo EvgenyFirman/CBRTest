@@ -16,12 +16,13 @@ class ViewController: UIViewController {
     
     let xmlparser = XMLParserClass()        // Initializers for XMLParserClass
     
+    let defaults = UserDefaults.standard
+    
     var currency: [Currency] = []           // Currency array
     
     override func viewDidLoad() {
         
         super.viewDidLoad()
-        
         
         let tap = UITapGestureRecognizer(target: self, action: #selector(UIInputViewController.dismissKeyboard))
         view.addGestureRecognizer(tap)      // Disable KeyBoard on tap
@@ -32,10 +33,19 @@ class ViewController: UIViewController {
         
         self.configureTableView()           // View set up for TableView
         
+        print(defaults.float(forKey: "price"))
         
         self.configureHeaderView()          // View set up for Header
         
         textField.delegate = self           // Text field Delegate
+        
+        if defaults.float(forKey: "price") == nil {
+            
+            labelField.isHidden = true
+            
+        } else {
+            labelField.isHidden = false
+        }
         
     }
     
@@ -72,7 +82,7 @@ class ViewController: UIViewController {
         
         
         labelField.textAlignment = NSTextAlignment.center
-        labelField.text = "20 RUB"
+        labelField.text = String("\(defaults.float(forKey: "price")) RUB" )
         labelField.font = UIFont(name: "HelveticaNeue-Bold", size: 14)
         labelField.isHidden = true
         labelField.textColor = .black
@@ -192,19 +202,25 @@ extension ViewController: UITextFieldDelegate{
             labelField.text = "\(text) RUB"
             
             labelField.isHidden = false
+            
+           
+            let priceValue = Float(text)
+            
+            defaults.setValue(priceValue, forKey: "price")
+        
         }
         
         textField.text = ""
     }
     
-    func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {      // Handling endEditing method
+    func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {     // Handling endEditing method to display placeholder
         
         if textField.text != ""{
             
             return true
             
         } else {
-    
+            
             textField.placeholder = "Цена"
             
             return false
