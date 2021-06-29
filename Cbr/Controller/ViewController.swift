@@ -44,7 +44,9 @@ class ViewController: UIViewController {
             labelField.isHidden = true
             
         } else {
+            
             labelField.isHidden = false
+            
         }
         
     }
@@ -114,8 +116,6 @@ class ViewController: UIViewController {
         labelField.translatesAutoresizingMaskIntoConstraints = false
         labelField.leadingAnchor.constraint(equalTo: textField.trailingAnchor, constant: 10).isActive = true
         labelField.centerYAnchor.constraint(equalTo: headerView.centerYAnchor).isActive = true
-        
-        
         
         self.tableView.tableHeaderView = headerView
     }
