@@ -34,15 +34,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         XMLParserClass().URLSetter()
         
-        let data = XMLParserClass().currency
-        
-        if Float(data.last!.value)! > ViewController().defaults.float(forKey: "price") {
+//        let currency = ViewController().currency
+//
+//        let data = Float(currency.last!.value)!
+//
+//        if  data > ViewController().defaults.float(forKey: "price") {
             
             self.scheduleNotification()
             
-        } else {
-            
-        }
+//        } else {
+//
+//        }
 
         return true
         
