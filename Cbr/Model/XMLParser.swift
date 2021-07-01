@@ -35,6 +35,7 @@ class XMLParserClass: NSObject, XMLParserDelegate {
         if let safeString = string {
         
             XMLApiCall(safeString)
+            print(string)
         }
     }
     
@@ -83,7 +84,13 @@ class XMLParserClass: NSObject, XMLParserDelegate {
         let year = calendar.component(.year, from: date)
         let month = calendar.component(.month, from: date)
         let day = calendar.component(.day, from: date)
-        return "\(day)/0\(month)/\(year)"
+        
+        if day < 10 {
+            return "0\(day)/0\(month)/\(year)"
+        } else {
+            return "\(day)/0\(month)/\(year)"
+        }
+       
     }
     
     

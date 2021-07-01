@@ -2,74 +2,76 @@
 //  AppDelegate.swift
 //  Cbr
 //  Created by Евгений Фирман on 24.06.2021.
-//
 
 import UIKit
 import UserNotifications
-import BackgroundTasks
+
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
     
     let notificationCenter = UNUserNotificationCenter.current()
-
+    
+    var currency: [Currency] = []
+    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         
-        // Initializing request for notifications
-        notificationCenter.requestAuthorization(options: [.alert,.sound, .alert]) { (granted, erro) in
-            
-            guard granted else {
-                return
+        let options: UNAuthorizationOptions = [.alert, .sound, .badge]
+        
+        notificationCenter.requestAuthorization(options: options) {
+            (didAllow, error) in
+            if !didAllow {
+                print("User has declined notifications")
             }
-            self.notificationCenter.getNotificationSettings { settings in
-    
-                guard settings.authorizationStatus == .authorized else {return}
-            }
+        }
+        
+        notificationCenter.getNotificationSettings { (settings) in
+          if settings.authorizationStatus != .authorized {
+            // Notifications not allowed
+          }
         }
         
         XMLParserClass().URLSetter()
         
         let data = XMLParserClass().currency
         
-        let value = data.last?.value
-        
-        if let safeValue = value {
+        if Float(data.last!.value)! > ViewController().defaults.float(forKey: "price") {
             
+            self.scheduleNotification()
             
-            
-            let userSetPrice = ViewController().defaults.float(forKey: "price")
-            
-            if Float(safeValue)! > userSetPrice {
-                
-                sendNotifications()
-                
-            } else {
-                
-            }
+        } else {
             
         }
-        
-        return true
 
+        return true
+        
     }
     
-    func sendNotifications(){
+    func scheduleNotification() {
         
         let content = UNMutableNotificationContent()
-        content.title = "Привет!"
+        
+        content.title = "Уведомление!!"
         content.body = "Курс доллара больше установленного в приложении"
         content.sound = UNNotificationSound.default
+        content.badge = 1
         
-        let trigger  =  UNTimeIntervalNotificationTrigger(timeInterval: 60, repeats: true)
+        let date = Date(timeIntervalSinceNow: 3600)
+        let triggerWeekly = Calendar.current.dateComponents([.weekday, .hour, .minute, .second,], from: date)
+        let trigger = UNCalendarNotificationTrigger(dateMatching: triggerWeekly, repeats: true)
         
-        let request = UNNotificationRequest(identifier: "notification", content: content, trigger: trigger)
         
-        notificationCenter.add(request) { error in
-            
-            print(error?.localizedDescription)
+        let identifier = "Local Notification"
+        let request = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
+
+        notificationCenter.add(request) { (error) in
+            if let error = error {
+                print("Error \(error.localizedDescription)")
+            }
         }
     }
+    
     
     // MARK: UISceneSession Lifecycle
     func application(_ application: UIApplication, configurationForConnecting connectingSceneSession: UISceneSession, options: UIScene.ConnectionOptions) -> UISceneConfiguration {
@@ -77,7 +79,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Use this method to select a configuration to create the new scene with.
         return UISceneConfiguration(name: "Default Configuration", sessionRole: connectingSceneSession.role)
     }
-
+    
     func application(_ application: UIApplication, didDiscardSceneSessions sceneSessions: Set<UISceneSession>) {
         // Called when the user discards a scene session.
         // If any sessions were discarded while the application was not running, this will be called shortly after application:didFinishLaunchingWithOptions.
@@ -85,10 +87,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     
-    func application(_ application: UIApplication, performFetchWithCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
-        
-        
-    }
+    
+  
+    
+  
 }
+
 
 

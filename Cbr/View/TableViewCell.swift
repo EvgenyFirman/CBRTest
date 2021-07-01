@@ -1,6 +1,4 @@
-//
 //  TableViewCell.swift
-//  Cbr
 //  Created by Евгений Фирман on 27.06.2021.
 
 import UIKit
